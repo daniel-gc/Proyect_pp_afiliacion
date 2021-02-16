@@ -122,9 +122,6 @@
 			<artifactId>openpay-api-client</artifactId>
 			<version>1.0.16</version>
 		</dependency>
-		
-	
-		
 	</dependencies>
 
 	<build>

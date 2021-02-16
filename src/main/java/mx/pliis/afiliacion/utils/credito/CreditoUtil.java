@@ -49,8 +49,8 @@ public class CreditoUtil {
 
 	public void copyFromCreditoDTOtoEntity(SolicitudCreditoDTO dto, CreditoEntity ent) {
 		ent.setIdCredito(dto.getIdCredito());
-		ent.setEsAfiliado(dto.getEsAfiliado());
-		ent.setEsMiembro(dto.getEsMiembro());
+		ent.setEsAfiliado(dto.getEsAfiliado() == null ? false : dto.getEsAfiliado());
+		ent.setEsMiembro(dto.getEsMiembro() == null ? false : dto.getEsMiembro());
 	    ent.setNombre(dto.getNombre());
 		ent.setApellidoPaterno(dto.getApellidoPaterno());
 	    ent.setApellidoMaterno(dto.getApellidoMaterno());
