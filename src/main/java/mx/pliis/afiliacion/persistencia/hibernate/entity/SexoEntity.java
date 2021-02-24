@@ -23,10 +23,13 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import lombok.Data;
+
 /**
  *
  * @author DELL
  */
+@Data
 @Entity
 @Table(name = "sexo")
 @NamedQueries({
@@ -61,38 +64,6 @@ public class SexoEntity implements Serializable {
     public SexoEntity(Integer idSexo, String nombre) {
         this.idSexo = idSexo;
         this.nombre = nombre;
-    }
-
-    public Integer getIdSexo() {
-        return idSexo;
-    }
-
-    public void setIdSexo(Integer idSexo) {
-        this.idSexo = idSexo;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Collection<AfiliadoEntity> getAfiliadoEntityCollection() {
-        return afiliadoEntityCollection;
-    }
-
-    public void setAfiliadoEntityCollection(Collection<AfiliadoEntity> afiliadoEntityCollection) {
-        this.afiliadoEntityCollection = afiliadoEntityCollection;
-    }
-
-    public Collection<FamiliarEntity> getFamiliarEntityCollection() {
-        return familiarEntityCollection;
-    }
-
-    public void setFamiliarEntityCollection(Collection<FamiliarEntity> familiarEntityCollection) {
-        this.familiarEntityCollection = familiarEntityCollection;
     }
 
     @Override

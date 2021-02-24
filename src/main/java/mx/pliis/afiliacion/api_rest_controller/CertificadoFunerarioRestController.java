@@ -1,7 +1,11 @@
 package mx.pliis.afiliacion.api_rest_controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,8 +17,6 @@ import lombok.extern.log4j.Log4j2;
 import mx.pliis.afiliacion.dto.CertificadoFunerarioDTO;
 import mx.pliis.afiliacion.dto.MensajeDTO;
 import mx.pliis.afiliacion.service.certificadoFunerario.CertificadoFunerarioService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/certificadoFunerario")
@@ -32,7 +34,7 @@ public class CertificadoFunerarioRestController {
 		try {
 			ret = certificadoFunerarioService.nuevoCertificadoFunerario(certificadoFunerarioDTO);
 		} catch (Exception e) {
-			MensajeDTO msg = new MensajeDTO("Ocurrió un error salvando la información: " + e.getLocalizedMessage());
+			MensajeDTO msg = new MensajeDTO("Ocurrió un error salvando la información: " + e.getMessage());
 			log.error(e.getLocalizedMessage());
 			return new ResponseEntity<>(msg, HttpStatus.PRECONDITION_FAILED);
 		}
