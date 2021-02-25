@@ -8,6 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -27,9 +28,9 @@ public class CertificadoFunerarioDTO {
 	@NotNull(message = "La edad es obligatorio")
 	private Integer nuEdad;
 	@NotNull(message = "Falta la fecha de nacimiento")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")	
-	private LocalDate fhNacimiento;
-	private String direccionDomicilio;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")	
+	private Date fhNacimiento;
+//	private String direccionDomicilio;
 	@NotNull(message = "El sexo es obligatorio")
 	private SexoDTO sexo;
 	@NotNull(message = "La calle y numero es obligatorio")

@@ -1,9 +1,6 @@
 package mx.pliis.afiliacion.api_rest_controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import lombok.extern.log4j.Log4j2;
 import mx.pliis.afiliacion.dto.CertificadoFunerarioDTO;
 import mx.pliis.afiliacion.dto.MensajeDTO;

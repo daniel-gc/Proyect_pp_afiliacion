@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
  * @author FerchoCV
  */
 @Repository
-public interface CertificadoFunerarioEntityRepository extends JpaRepository<CertificadoFunerarioEntity, Integer>{
+public interface CertificadoFunerarioEntityRepository extends JpaRepository<CertificadoFunerarioEntity, Integer> {
 
-    
+    String findLastCertificado();
 }
