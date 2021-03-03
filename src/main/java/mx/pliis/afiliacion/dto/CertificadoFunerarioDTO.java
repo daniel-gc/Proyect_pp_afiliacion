@@ -60,5 +60,7 @@ public class CertificadoFunerarioDTO {
 	@NotEmpty(message = "El correo es obligatorio")
 	@Email
 	private String cdCorreo;
+        @NotNull(message = "El usuario es obligatorio")
+	private Integer idUsuario;
 
 }

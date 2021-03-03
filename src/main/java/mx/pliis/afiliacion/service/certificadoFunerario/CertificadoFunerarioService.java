@@ -1,7 +1,9 @@
 package mx.pliis.afiliacion.service.certificadoFunerario;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import mx.pliis.afiliacion.dto.CertificadoFunerarioDTO;
-import mx.pliis.afiliacion.dto.NuevoAfiliadoDTO;
 
 /**
  *
@@ -10,5 +12,8 @@ import mx.pliis.afiliacion.dto.NuevoAfiliadoDTO;
 public interface CertificadoFunerarioService {
 
     Integer nuevoCertificadoFunerario(CertificadoFunerarioDTO certificadoFunerarioDTO);
+
+    ByteArrayOutputStream generaReporteCorteSupervisor(String cdCertificado,
+            String rutaTotalArchivo, String rutaTotalImagen) throws FileNotFoundException, IOException;
     
 }

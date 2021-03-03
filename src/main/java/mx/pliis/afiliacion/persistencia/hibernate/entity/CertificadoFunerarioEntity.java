@@ -16,7 +16,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import lombok.Data;
 
 @Data
@@ -85,16 +84,28 @@ public class CertificadoFunerarioEntity implements Serializable {
     @Column(name = "nb_ciudad")
     private String nbCiudad;
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 30)
     @Column(name = "cd_curp")
     private String cdCurp;
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 15)
     @Column(name = "cd_rfc")
     private String cdRfc;
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 50)
     @Column(name = "cd_correo")
     private String cdCorreo;
+    @NotNull
+    @Column(name = "id_usr_creacion")
+    private int idUsrCreacion;
+    @NotNull
+    @Column(name = "fh_creacion")
+    private Date fhCreacion;
+    @NotNull
+    @Column(name = "id_usr_modificacion")
+    private int idUsrModificacion;
+    @NotNull
+    @Column(name = "fh_modificacion")
+    private Date fhModificacion;
 
 }
