@@ -15,6 +15,7 @@ import mx.pliis.afiliacion.dto.CertificadoFunerarioDTO;
 import mx.pliis.afiliacion.persistencia.hibernate.entity.CertificadoFunerarioEntity;
 import mx.pliis.afiliacion.persistencia.hibernate.repository.CertificadoFunerarioEntityRepository;
 import mx.pliis.afiliacion.utils.comun.ResponseConverter;
+import mx.pliis.afiliacion.utils.comun.RutinasTiempo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,9 @@ public class CertificadoFunerarioServiceImpl implements CertificadoFunerarioServ
 
     @Autowired
     private CertificadoFunerarioEntityRepository certificadoFunerarioEntityRepository;
+
+    @Autowired
+    private RutinasTiempo rutinasTiempo;
 
     @Override
     @Transactional(readOnly = false)
@@ -69,15 +73,15 @@ public class CertificadoFunerarioServiceImpl implements CertificadoFunerarioServ
 //            InputStream imagen = new FileInputStream(rutaTotalImagen);
 
             parametros.put("imagen1", rutaTotalImagen);
-            parametros.put("cdCertificado", certificadoFunerarioEntity.getCdCertificado());
+            parametros.put("folio", certificadoFunerarioEntity.getCdCertificado());
             parametros.put("nbPersona", certificadoFunerarioEntity.getNbPersona());
             parametros.put("apPaterno", certificadoFunerarioEntity.getApPaterno());
             parametros.put("apMaterno", certificadoFunerarioEntity.getApMaterno());
-            parametros.put("nuEdad", certificadoFunerarioEntity.getNuEdad() + "");
-            parametros.put("fhNacimiento", certificadoFunerarioEntity.getFhNacimiento());
-            parametros.put("sexo", certificadoFunerarioEntity.getSexo());
+            parametros.put("nuEdad", String.valueOf(certificadoFunerarioEntity.getNuEdad()));
+            parametros.put("fhNacimiento", rutinasTiempo.getStringDateFromFormta("dd/MM/yyyy",certificadoFunerarioEntity.getFhNacimiento()));
+            parametros.put("sexo", certificadoFunerarioEntity.getSexo().getNombre());
             parametros.put("txCalleNumero", certificadoFunerarioEntity.getTxCalleNumero());
-            parametros.put("nuInterior", certificadoFunerarioEntity.getNuInterior());
+            parametros.put("nuInterior", String.valueOf(certificadoFunerarioEntity.getNuInterior()));
             parametros.put("nbColonia", certificadoFunerarioEntity.getNbColonia());
             parametros.put("nbMunicipio", certificadoFunerarioEntity.getNbMunicipio());
             parametros.put("nbEstado", certificadoFunerarioEntity.getNbEstado());
