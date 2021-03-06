@@ -1,8 +1,6 @@
 package mx.pliis.afiliacion.service.certificadoFunerario;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
@@ -61,6 +59,7 @@ public class CertificadoFunerarioServiceImpl implements CertificadoFunerarioServ
     }
 
     @Override
+    @Transactional
     public ByteArrayOutputStream generaReporteCorteSupervisor(String cdCertificado,
             String rutaTotalArchivo, String rutaTotalImagen) throws FileNotFoundException, IOException {
         var certOptional = certificadoFunerarioEntityRepository.findByCdCertificado(cdCertificado);

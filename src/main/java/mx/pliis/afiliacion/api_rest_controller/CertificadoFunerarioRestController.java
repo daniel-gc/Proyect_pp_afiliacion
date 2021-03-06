@@ -57,7 +57,7 @@ public class CertificadoFunerarioRestController {
 
         String filename = "reporteCorteSupervisor.pdf";
         String rutaArchivo = context.getRealPath("/WEB-INF/jasper/certificadoFunerario/certificadoFunerario.jasper");
-        String rutaImagen = context.getRealPath("/WEB-INF/jasper/certificadoFunerario/asistencia.png");
+        String rutaImagen = context.getRealPath("/WEB-INF/jasper/certificadoFunerario/asistencia.PNG");
 
         ByteArrayOutputStream reporte = certificadoFunerarioService.generaReporteCorteSupervisor(cdCertificado, rutaArchivo, rutaImagen);
         if(reporte==null){

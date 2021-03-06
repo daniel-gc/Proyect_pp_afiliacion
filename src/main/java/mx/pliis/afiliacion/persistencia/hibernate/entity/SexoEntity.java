@@ -38,7 +38,8 @@ import lombok.Data;
     @NamedQuery(name = "SexoEntity.findByNombre", query = "SELECT s FROM SexoEntity s WHERE s.nombre = :nombre")})
 public class SexoEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 275548587203762010L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
