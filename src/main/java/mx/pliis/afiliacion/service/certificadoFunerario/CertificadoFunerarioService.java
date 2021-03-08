@@ -14,6 +14,6 @@ public interface CertificadoFunerarioService {
     Integer nuevoCertificadoFunerario(CertificadoFunerarioDTO certificadoFunerarioDTO);
 
     ByteArrayOutputStream generaReporteCorteSupervisor(String cdCertificado,
-            String rutaTotalArchivo, String rutaTotalImagen) throws FileNotFoundException, IOException;
+            String rutaTotalArchivo, String [] rutaTotalImagen) throws FileNotFoundException, IOException;
     
 }

@@ -33,7 +33,7 @@ public class CertificadoFunerarioServiceImpl implements CertificadoFunerarioServ
     private RutinasTiempo rutinasTiempo;
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public Integer nuevoCertificadoFunerario(CertificadoFunerarioDTO certificadoFunerarioDTO) {
 //        var certificadoFunerarioEntity = new CertificadoFunerarioEntity();
 //        copyProperties.copyProperties(certificadoFunerarioDTO, certificadoFunerarioEntity);
@@ -61,7 +61,7 @@ public class CertificadoFunerarioServiceImpl implements CertificadoFunerarioServ
     @Override
     @Transactional
     public ByteArrayOutputStream generaReporteCorteSupervisor(String cdCertificado,
-            String rutaTotalArchivo, String rutaTotalImagen) throws FileNotFoundException, IOException {
+            String rutaTotalArchivo, String [] rutaTotalImagen) throws FileNotFoundException, IOException {
         var certOptional = certificadoFunerarioEntityRepository.findByCdCertificado(cdCertificado);
         if (certOptional.isPresent()) {
 
@@ -71,7 +71,9 @@ public class CertificadoFunerarioServiceImpl implements CertificadoFunerarioServ
             HashMap parametros = new HashMap();
 //            InputStream imagen = new FileInputStream(rutaTotalImagen);
 
-            parametros.put("imagen1", rutaTotalImagen);
+            parametros.put("imagen1", rutaTotalImagen[0]);
+            parametros.put("imagen2", rutaTotalImagen[1]);
+            parametros.put("imagen3", rutaTotalImagen[2]);
             parametros.put("folio", certificadoFunerarioEntity.getCdCertificado());
             parametros.put("nbPersona", certificadoFunerarioEntity.getNbPersona());
             parametros.put("apPaterno", certificadoFunerarioEntity.getApPaterno());

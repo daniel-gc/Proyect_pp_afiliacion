@@ -17,6 +17,7 @@ import lombok.extern.log4j.Log4j2;
 import mx.pliis.afiliacion.dto.CertificadoFunerarioDTO;
 import mx.pliis.afiliacion.dto.MensajeDTO;
 import mx.pliis.afiliacion.service.certificadoFunerario.CertificadoFunerarioService;
+import mx.pliis.afiliacion.service.job.JobEnvioDatosFunerariaService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +31,8 @@ public class CertificadoFunerarioRestController {
 
     @Autowired
     ServletContext context;
-
+    @Autowired
+    private JobEnvioDatosFunerariaService jobEnvioDatosFunerariaService;
     @Autowired
     private CertificadoFunerarioService certificadoFunerarioService;
 
@@ -55,9 +57,11 @@ public class CertificadoFunerarioRestController {
     public ResponseEntity<?> generarPDFCorteSupervisor(@RequestParam(value = "cdCertificado") String cdCertificado)
             throws FileNotFoundException, IOException {
 
-        String filename = "reporteCorteSupervisor.pdf";
+        String filename = "CertificadoFunerario.pdf";
         String rutaArchivo = context.getRealPath("/WEB-INF/jasper/certificadoFunerario/certificadoFunerario.jasper");
-        String rutaImagen = context.getRealPath("/WEB-INF/jasper/certificadoFunerario/asistencia.PNG");
+        String rutaImagen[] = {context.getRealPath("/WEB-INF/jasper/certificadoFunerario/asistencia.PNG"),
+                               context.getRealPath("/WEB-INF/jasper/certificadoFunerario/snac.PNG"),
+                               context.getRealPath("/WEB-INF/jasper/certificadoFunerario/piePag.PNG")};
 
         ByteArrayOutputStream reporte = certificadoFunerarioService.generaReporteCorteSupervisor(cdCertificado, rutaArchivo, rutaImagen);
         if(reporte==null){
@@ -71,6 +75,10 @@ public class CertificadoFunerarioRestController {
         headers.add("filename", filename);
         headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
         headers.setContentLength(bytes.length);
+        jobEnvioDatosFunerariaService.sendEmailWithAttachment(
+							"Se adjuntan los certificados funerarios", 
+							"Archivo de certificados funerarios", "perfet_23@hotmail.com", reporte
+							);
         return new ResponseEntity<byte[]>(bytes, headers, HttpStatus.OK);
 
     }
