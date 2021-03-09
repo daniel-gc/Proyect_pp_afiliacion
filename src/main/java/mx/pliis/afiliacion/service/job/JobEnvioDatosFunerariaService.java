@@ -70,9 +70,9 @@ public class JobEnvioDatosFunerariaService {
 			
 			Properties props = new Properties();
 			props.put("mail.smtp.host", "smtp.gmail.com");
-			props.setProperty("mail.smtp.starttls.enable", "true");
-			props.setProperty("mail.smtp.port", "587");
-			props.setProperty("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.port", "587");
+			props.put("mail.smtp.auth", "true");
 			
 			props.put("from", username);
 			props.put("username", username);
@@ -95,7 +95,7 @@ public class JobEnvioDatosFunerariaService {
 
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(props.getProperty("from")));
-			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 			message.setSubject(subject);
 			message.setContent(multiParte);
 
@@ -107,11 +107,6 @@ public class JobEnvioDatosFunerariaService {
 			
 		}catch (Exception e) {
 			e.printStackTrace();
-		}finally {
-			File f = new File(TMP_FILE);
-			if(f.exists() && !f.isDirectory()) { 
-				f.delete();
-			}
 		}
 	}
 	

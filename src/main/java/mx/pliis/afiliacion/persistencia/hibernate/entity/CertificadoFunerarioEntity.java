@@ -107,5 +107,8 @@ public class CertificadoFunerarioEntity implements Serializable {
     @NotNull
     @Column(name = "fh_modificacion")
     private Date fhModificacion;
+    @NotNull
+    @Column(name = "vigencia_fin_certificado")
+    private Date vigenciaFinCertificado;
 
 }

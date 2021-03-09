@@ -3,6 +3,7 @@ package mx.pliis.afiliacion.service.certificadoFunerario;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -39,11 +40,15 @@ public class CertificadoFunerarioServiceImpl implements CertificadoFunerarioServ
 //        copyProperties.copyProperties(certificadoFunerarioDTO, certificadoFunerarioEntity);
         var certificadoFunerarioEntity = ResponseConverter.copiarPropiedadesFull(certificadoFunerarioDTO, CertificadoFunerarioEntity.class);
         String cdCertificado = certificadoFunerarioEntityRepository.findLastCertificado();
-
+        Date hoy = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(hoy);
+        c.add(Calendar.MONTH, certificadoFunerarioDTO.getVigenciaFinCertificado());
         certificadoFunerarioEntity.setIdUsrCreacion(certificadoFunerarioDTO.getIdUsuario());
-        certificadoFunerarioEntity.setFhCreacion(new Date());
+        certificadoFunerarioEntity.setFhCreacion(hoy);
         certificadoFunerarioEntity.setIdUsrModificacion(certificadoFunerarioDTO.getIdUsuario());
-        certificadoFunerarioEntity.setFhModificacion(new Date());
+        certificadoFunerarioEntity.setFhModificacion(hoy);
+        certificadoFunerarioEntity.setVigenciaFinCertificado(c.getTime());
 
         if (cdCertificado == null) {
             certificadoFunerarioEntity.setCdCertificado("00001");
@@ -60,7 +65,7 @@ public class CertificadoFunerarioServiceImpl implements CertificadoFunerarioServ
 
     @Override
     @Transactional
-    public ByteArrayOutputStream generaReporteCorteSupervisor(String cdCertificado,
+    public ByteArrayOutputStream generarPDFCertificadoFn(String cdCertificado,
             String rutaTotalArchivo, String [] rutaTotalImagen) throws FileNotFoundException, IOException {
         var certOptional = certificadoFunerarioEntityRepository.findByCdCertificado(cdCertificado);
         if (certOptional.isPresent()) {

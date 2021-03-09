@@ -53,8 +53,7 @@ public class CertificadoFunerarioRestController {
     }
 
     @GetMapping(value = "/generarReporteCertificadoFunerario")
-    // @PreAuthorize("hasAnyAuthority('GENERAR_GARANTIAS_ENTREGA_PDF')")
-    public ResponseEntity<?> generarPDFCorteSupervisor(@RequestParam(value = "cdCertificado") String cdCertificado)
+    public ResponseEntity<?> generarPDFCertificadoFn(@RequestParam(value = "cdCertificado") String cdCertificado, @RequestParam(value = "cdCorreoFn") String cdCorreoFn)
             throws FileNotFoundException, IOException {
 
         String filename = "CertificadoFunerario.pdf";
@@ -63,7 +62,7 @@ public class CertificadoFunerarioRestController {
                                context.getRealPath("/WEB-INF/jasper/certificadoFunerario/snac.PNG"),
                                context.getRealPath("/WEB-INF/jasper/certificadoFunerario/piePag.PNG")};
 
-        ByteArrayOutputStream reporte = certificadoFunerarioService.generaReporteCorteSupervisor(cdCertificado, rutaArchivo, rutaImagen);
+        ByteArrayOutputStream reporte = certificadoFunerarioService.generarPDFCertificadoFn(cdCertificado, rutaArchivo, rutaImagen);
         if(reporte==null){
             MensajeDTO msg = new MensajeDTO("Ocurrió un error salvando la información: No se encotró el certificado");
             return new ResponseEntity<>(msg, HttpStatus.PRECONDITION_FAILED);
@@ -77,7 +76,7 @@ public class CertificadoFunerarioRestController {
         headers.setContentLength(bytes.length);
         jobEnvioDatosFunerariaService.sendEmailWithAttachment(
 							"Se adjuntan los certificados funerarios", 
-							"Archivo de certificados funerarios", "perfet_23@hotmail.com", reporte
+							"Archivo de certificados funerarios", cdCorreoFn, reporte
 							);
         return new ResponseEntity<byte[]>(bytes, headers, HttpStatus.OK);
 
