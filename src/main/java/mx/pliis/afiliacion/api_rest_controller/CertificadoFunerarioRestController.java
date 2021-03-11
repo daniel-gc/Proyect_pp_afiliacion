@@ -3,6 +3,7 @@ package mx.pliis.afiliacion.api_rest_controller;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import javax.mail.MessagingException;
 import javax.servlet.ServletContext;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class CertificadoFunerarioRestController {
 
     @GetMapping(value = "/generarReporteCertificadoFunerario")
     public ResponseEntity<?> generarPDFCertificadoFn(@RequestParam(value = "cdCertificado") String cdCertificado, @RequestParam(value = "cdCorreoFn") String cdCorreoFn)
-            throws FileNotFoundException, IOException {
+            throws FileNotFoundException, IOException, MessagingException {
 
         String filename = "CertificadoFunerario.pdf";
         String rutaArchivo = context.getRealPath("/WEB-INF/jasper/certificadoFunerario/certificadoFunerario.jasper");
@@ -76,7 +77,7 @@ public class CertificadoFunerarioRestController {
         headers.setContentLength(bytes.length);
         jobEnvioDatosFunerariaService.sendEmailWithAttachment(
 							"Se adjuntan los certificados funerarios", 
-							"Archivo de certificados funerarios", cdCorreoFn, reporte
+							"Archivo de certificado funerario", cdCorreoFn, reporte, cdCertificado
 							);
         return new ResponseEntity<byte[]>(bytes, headers, HttpStatus.OK);
 
