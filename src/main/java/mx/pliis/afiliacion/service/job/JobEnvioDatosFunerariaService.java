@@ -31,6 +31,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -40,10 +41,10 @@ public class JobEnvioDatosFunerariaService {
     private final static String TMP_FILE = "tmp" + File.separator;
     private final static String CODIGO_CAT_FUNERARIAS = "FUNERARIAS";
 
-//	@Value("${username.email.addr}")
-    private String username = "perfet.23.fc@gmail.com";
-//	@Value("${username.email.passw}")
-    private String password = "Te_amo_Esme";
+    @Value("${username.email.addr}")
+    private String username;
+    @Value("${username.email.passw}")
+    private String password;
 
     // Cron cada dia a las 00:00:01 AM
     @Scheduled(cron = "1 0 0 * * ?", zone = "America/Mexico_City")
