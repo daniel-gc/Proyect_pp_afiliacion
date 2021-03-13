@@ -3,9 +3,11 @@ package mx.pliis.afiliacion.service.certificadoFunerario;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +45,7 @@ public class CertificadoFunerarioServiceImpl implements CertificadoFunerarioServ
         Date hoy = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(hoy);
-        c.add(Calendar.MONTH, certificadoFunerarioDTO.getVigenciaFinCertificado());
+        c.add(Calendar.MONTH, certificadoFunerarioDTO.getMesesVigencia());
         certificadoFunerarioEntity.setIdUsrCreacion(certificadoFunerarioDTO.getIdUsuario());
         certificadoFunerarioEntity.setFhCreacion(hoy);
         certificadoFunerarioEntity.setIdUsrModificacion(certificadoFunerarioDTO.getIdUsuario());
@@ -65,8 +67,21 @@ public class CertificadoFunerarioServiceImpl implements CertificadoFunerarioServ
 
     @Override
     @Transactional
+    public List<CertificadoFunerarioDTO> findAll() {
+        List<CertificadoFunerarioDTO> listCertificadoFunerarioDTO = new ArrayList<>();
+        List<CertificadoFunerarioEntity> listCertificadoFunerarioEntity = certificadoFunerarioEntityRepository.findAll();
+        if(!listCertificadoFunerarioEntity.isEmpty())
+            listCertificadoFunerarioDTO = ResponseConverter.converterLista
+                                            (new ArrayList<>(), listCertificadoFunerarioEntity, CertificadoFunerarioDTO.class);
+        else
+            return listCertificadoFunerarioDTO;
+        return listCertificadoFunerarioDTO;
+    }
+
+    @Override
+    @Transactional
     public ByteArrayOutputStream generarPDFCertificadoFn(String cdCertificado,
-            String rutaTotalArchivo, String [] rutaTotalImagen) throws FileNotFoundException, IOException {
+            String rutaTotalArchivo, String[] rutaTotalImagen) throws FileNotFoundException, IOException {
         var certOptional = certificadoFunerarioEntityRepository.findByCdCertificado(cdCertificado);
         if (certOptional.isPresent()) {
 
@@ -84,7 +99,7 @@ public class CertificadoFunerarioServiceImpl implements CertificadoFunerarioServ
             parametros.put("apPaterno", certificadoFunerarioEntity.getApPaterno());
             parametros.put("apMaterno", certificadoFunerarioEntity.getApMaterno());
             parametros.put("nuEdad", String.valueOf(certificadoFunerarioEntity.getNuEdad()));
-            parametros.put("fhNacimiento", rutinasTiempo.getStringDateFromFormta("dd/MM/yyyy",certificadoFunerarioEntity.getFhNacimiento()));
+            parametros.put("fhNacimiento", rutinasTiempo.getStringDateFromFormta("dd/MM/yyyy", certificadoFunerarioEntity.getFhNacimiento()));
             parametros.put("sexo", certificadoFunerarioEntity.getSexo().getNombre());
             parametros.put("txCalleNumero", certificadoFunerarioEntity.getTxCalleNumero());
             parametros.put("nuInterior", String.valueOf(certificadoFunerarioEntity.getNuInterior()));

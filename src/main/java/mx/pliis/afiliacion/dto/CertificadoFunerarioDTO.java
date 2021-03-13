@@ -1,14 +1,10 @@
 package mx.pliis.afiliacion.dto;
 
-import java.time.LocalDate;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
-
 import lombok.Data;
 
 @Data
@@ -37,7 +33,7 @@ public class CertificadoFunerarioDTO {
     @NotEmpty(message = "La calle y numero es obligatorio")
     private String txCalleNumero;
     @NotNull(message = "El número interior es obligatorio")
-    private Integer nuInterior;
+    private int nuInterior;
     @NotNull(message = "La colonia es obligatorio")
     @NotEmpty(message = "La colonia es obligatorio")
     private String nbColonia;
@@ -62,7 +58,9 @@ public class CertificadoFunerarioDTO {
     private String cdCorreo;
     @NotNull(message = "El usuario es obligatorio")
     private Integer idUsuario;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date vigenciaFinCertificado;
     @NotNull(message = "Falta el tiempo de vencimiento")
-    private int vigenciaFinCertificado;
+    private int mesesVigencia;
 
 }
