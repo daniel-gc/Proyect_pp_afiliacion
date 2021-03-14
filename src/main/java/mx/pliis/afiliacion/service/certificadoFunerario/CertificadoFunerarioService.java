@@ -14,7 +14,7 @@ public interface CertificadoFunerarioService {
 
     Integer nuevoCertificadoFunerario(CertificadoFunerarioDTO certificadoFunerarioDTO);
 
-    List<CertificadoFunerarioDTO> findAll();
+    List<String> findAllCdCertificados();
     
     ByteArrayOutputStream generarPDFCertificadoFn(String cdCertificado,
             String rutaTotalArchivo, String [] rutaTotalImagen) throws FileNotFoundException, IOException;

@@ -1,11 +1,13 @@
 package mx.pliis.afiliacion.service.job;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -17,6 +19,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -43,9 +47,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class JobEnvioDatosFunerariaService {
 
+    private final static Date f = new Date();
     private final static String TMP_FILE = "tmp" + File.separator;
-    private final static String CODIGO_CAT_FUNERARIAS = "FUNERARIAS";
-
+    private final static String TMP_FILE_ZIP = "Certificados_Funerarios" + File.separator;
+    
     @Value("${username.email.addr}")
     private String username;
     @Value("${username.email.passw}")
@@ -54,30 +59,26 @@ public class JobEnvioDatosFunerariaService {
     // Cron cada dia a las 00:00:01 AM
 //    @Scheduled(cron = "1 0 0 * * ?", zone = "America/Mexico_City")
     public void enviaDatosFuneraria(List<FileReporteDTO> listFileReporteDTO) throws FileNotFoundException, IOException, MessagingException {
-        listFileReporteDTO.forEach(fileReporteDTO -> {
-            try {
-                ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(TMP_FILE));
-                ZipEntry zipEntry = new ZipEntry(fileReporteDTO.getCdCertificado());
-                zos.putNextEntry(zipEntry);
-
-                ByteArrayInputStream bais = new ByteArrayInputStream(fileReporteDTO.getReporte().toByteArray());
-                // one line, able to handle large size?
-                //zos.write(bais.readAllBytes());
-
-                // play safe
-                byte[] buffer = new byte[1024];
-                int len;
-                while ((len = bais.read(buffer)) > 0) {
-                    zos.write(buffer, 0, len);
+        ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(new File(TMP_FILE_ZIP))));
+        try (zos) {
+            listFileReporteDTO.forEach(reporte -> {
+                try {
+                    givenDataArray_whenConvertToCSV_thenOutputCreated(reporte.getReporte());
+                    InputStream resource = new ByteArrayInputStream(reporte.getReporte().toByteArray());
+                    zos.putNextEntry(new ZipEntry(TMP_FILE_ZIP+"Certificado_Funerario_" + reporte.getCdCertificado() + ".pdf"));
+                    zos.write(resource.readAllBytes());
+                    zos.closeEntry();
+                } catch (IOException ex) {
+                    Logger.getLogger(JobEnvioDatosFunerariaService.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                zos.closeEntry();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+            });
+        } catch (IOException ex) {
+            Logger.getLogger(JobEnvioDatosFunerariaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         sendEmailZip(
                 "Se adjuntan los certificados funerarios",
-                "ArchivoS de certificado funerario", "pliiscorporate@gmail.com");
+                "Archivos de certificado funerario", "daniel.wolf2.gc@gmail.com");
     }
 
     public void sendEmailWithAttachment(String text, String subject, String to, ByteArrayOutputStream reporte, String codigo) throws MessagingException, IOException {
@@ -168,7 +169,7 @@ public class JobEnvioDatosFunerariaService {
         texto.setText(text);
 //        givenDataArray_whenConvertToCSV_thenOutputCreated(reporte);
         BodyPart adjunto = new MimeBodyPart();
-        adjunto.setDataHandler(new DataHandler(new FileDataSource(TMP_FILE)));
+        adjunto.setDataHandler(new DataHandler(new FileDataSource(TMP_FILE_ZIP)));
         adjunto.setFileName("Certificados_Funerarios.zip");
         MimeMultipart multiParte = new MimeMultipart();
         multiParte.addBodyPart(texto);

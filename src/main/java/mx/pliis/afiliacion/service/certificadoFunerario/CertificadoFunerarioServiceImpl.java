@@ -67,15 +67,16 @@ public class CertificadoFunerarioServiceImpl implements CertificadoFunerarioServ
 
     @Override
     @Transactional
-    public List<CertificadoFunerarioDTO> findAll() {
-        List<CertificadoFunerarioDTO> listCertificadoFunerarioDTO = new ArrayList<>();
+    public List<String> findAllCdCertificados() {
+        List<String> listCdCertificado = new ArrayList<>();
         List<CertificadoFunerarioEntity> listCertificadoFunerarioEntity = certificadoFunerarioEntityRepository.findAll();
         if(!listCertificadoFunerarioEntity.isEmpty())
-            listCertificadoFunerarioDTO = ResponseConverter.converterLista
-                                            (new ArrayList<>(), listCertificadoFunerarioEntity, CertificadoFunerarioDTO.class);
+            listCertificadoFunerarioEntity.forEach(certificadoFunerario -> {
+                listCdCertificado.add(certificadoFunerario.getCdCertificado());
+            });
         else
-            return listCertificadoFunerarioDTO;
-        return listCertificadoFunerarioDTO;
+            return listCdCertificado;
+        return listCdCertificado;
     }
 
     @Override

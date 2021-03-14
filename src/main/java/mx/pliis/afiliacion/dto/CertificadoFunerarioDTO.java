@@ -33,7 +33,7 @@ public class CertificadoFunerarioDTO {
     @NotEmpty(message = "La calle y numero es obligatorio")
     private String txCalleNumero;
     @NotNull(message = "El número interior es obligatorio")
-    private int nuInterior;
+    private Integer nuInterior;
     @NotNull(message = "La colonia es obligatorio")
     @NotEmpty(message = "La colonia es obligatorio")
     private String nbColonia;
@@ -61,6 +61,6 @@ public class CertificadoFunerarioDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date vigenciaFinCertificado;
     @NotNull(message = "Falta el tiempo de vencimiento")
-    private int mesesVigencia;
+    private Integer mesesVigencia;
 
 }

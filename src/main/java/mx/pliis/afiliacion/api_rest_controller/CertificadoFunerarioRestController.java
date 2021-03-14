@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -89,24 +90,24 @@ public class CertificadoFunerarioRestController {
 
     }
 
-    @Scheduled(cron = "0 0 1 * * ?")
+    @Scheduled(cron = "0 0 01 * * ?")
     public void envioCertificadoFunerario() throws FileNotFoundException, IOException, MessagingException {
-        List<CertificadoFunerarioDTO> listCertificadoFunerarioDTO = certificadoFunerarioService.findAll();
+        List<String> listCdCertificado = certificadoFunerarioService.findAllCdCertificados();
         String rutaArchivo = context.getRealPath("/WEB-INF/jasper/certificadoFunerario/certificadoFunerario.jasper");
         String rutaImagen[] = {context.getRealPath("/WEB-INF/jasper/certificadoFunerario/asistencia.PNG"),
             context.getRealPath("/WEB-INF/jasper/certificadoFunerario/snac.PNG"),
             context.getRealPath("/WEB-INF/jasper/certificadoFunerario/piePag.PNG")};
         List<FileReporteDTO> listFileReporteDTO = new ArrayList<>();
-        listCertificadoFunerarioDTO.forEach(certificadoFunerarioDTO -> {
+        listCdCertificado.forEach(cdCertificado -> {
             ByteArrayOutputStream reporte;
             FileReporteDTO fileReporteDTO = new FileReporteDTO();
             try {
-                reporte = certificadoFunerarioService.generarPDFCertificadoFn(certificadoFunerarioDTO.getCdCertificado(), rutaArchivo, rutaImagen);
+                reporte = certificadoFunerarioService.generarPDFCertificadoFn(cdCertificado, rutaArchivo, rutaImagen);
                 if (reporte == null) {
-                    MensajeDTO msg = new MensajeDTO("Ocurrió un error: No se encotró el certificado" + certificadoFunerarioDTO.getCdCertificado());
+                    MensajeDTO msg = new MensajeDTO("Ocurrió un error: No se encotró el certificado" + cdCertificado);
                 } else {
                     fileReporteDTO.setReporte(reporte);
-                    fileReporteDTO.setCdCertificado(certificadoFunerarioDTO.getCdCertificado());
+                    fileReporteDTO.setCdCertificado(cdCertificado);
                     listFileReporteDTO.add(fileReporteDTO);
                 }
             } catch (IOException ex) {
@@ -116,6 +117,7 @@ public class CertificadoFunerarioRestController {
         });
         if (!listFileReporteDTO.isEmpty()) {
             jobEnvioDatosFunerariaService.enviaDatosFuneraria(listFileReporteDTO);
+            System.out.println("Envio realizado"+new Date());
         }
     }
 
